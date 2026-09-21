@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci_Hanoi", "Fibonacci_Hanoi\Fibonacci_Hanoi.csproj", "{244B3C18-55A1-4435-9F61-66838F89837C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fibonacci_Hanoi.Tests", "Fibonacci_Hanoi.Tests\Fibonacci_Hanoi.Tests.csproj", "{CF220C2F-BF52-41EC-BF90-95BD1C4D90BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{244B3C18-55A1-4435-9F61-66838F89837C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{244B3C18-55A1-4435-9F61-66838F89837C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{244B3C18-55A1-4435-9F61-66838F89837C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{244B3C18-55A1-4435-9F61-66838F89837C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF220C2F-BF52-41EC-BF90-95BD1C4D90BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF220C2F-BF52-41EC-BF90-95BD1C4D90BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF220C2F-BF52-41EC-BF90-95BD1C4D90BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF220C2F-BF52-41EC-BF90-95BD1C4D90BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
