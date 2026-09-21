@@ -21,6 +21,7 @@ public sealed class MainForm : Form
     private readonly System.Windows.Forms.Timer _reproductor = new() { Interval = 420 };
     private IReadOnlyList<Movimiento> _movimientos = [];
     private int _siguiente;
+    private bool _modoManual;
     private HanoiBoard? _tablero;
     private ListBox? _lista;
     private Label? _estado;
@@ -243,6 +244,9 @@ public sealed class MainForm : Form
         var zonaJuego = Tarjeta();
         zonaJuego.Margin = new Padding(0, 0, 8, 0);
         _tablero = new HanoiBoard { Dock = DockStyle.Fill };
+        var instrucciones = Etiqueta(
+            "MANUAL: selecciona el disco superior, pasa sobre una torre válida y haz clic para colocarlo.",
+            Retro.Secundario, 9, 42);
         _estado = Etiqueta("", Retro.Cian, 10, 54);
         _estado.Dock = DockStyle.Bottom;
         var barra = new FlowLayoutPanel { Dock = DockStyle.Top, Height = 67, WrapContents = false };
@@ -268,6 +272,7 @@ public sealed class MainForm : Form
         barra.Controls.AddRange([etiquetaDiscos, discos, _iniciar, paso, reiniciar]);
         zonaJuego.Controls.Add(_tablero);
         zonaJuego.Controls.Add(_estado);
+        zonaJuego.Controls.Add(instrucciones);
         zonaJuego.Controls.Add(barra);
 
         var registro = Tarjeta();
@@ -288,6 +293,7 @@ public sealed class MainForm : Form
         void PrepararJuego()
         {
             _reproductor.Stop();
+            _modoManual = false;
             _movimientos = Algoritmos.Hanoi((int)discos.Value);
             _siguiente = 0;
             _tablero.Reiniciar((int)discos.Value);
@@ -298,7 +304,37 @@ public sealed class MainForm : Form
             _estado.ForeColor = Retro.Cian;
             _estado.Text = $"0 / {_movimientos.Count} movimientos · Mínimo: 2^{discos.Value} - 1";
             _iniciar.Text = "INICIAR";
+            _iniciar.Enabled = true;
+            paso.Enabled = true;
         }
+
+        _tablero.SeleccionManualIniciada += () =>
+        {
+            if (_modoManual)
+                return;
+
+            _reproductor.Stop();
+            _modoManual = true;
+            _lista.Items.Clear();
+            for (var i = 0; i < _siguiente; i++)
+                _lista.Items.Add($"{i + 1:000}  {_movimientos[i]}");
+            _lista.ClearSelected();
+            _iniciar.Enabled = false;
+            paso.Enabled = false;
+            _estado.ForeColor = Retro.Cian;
+            _estado.Text = "MODO MANUAL · Haz clic en otra torre válida. Reinicia para volver a la solución automática.";
+        };
+
+        _tablero.MovimientoManualRealizado += movimiento =>
+        {
+            _lista.Items.Add($"{_lista.Items.Count + 1:000}  {movimiento}");
+            _lista.SelectedIndex = _lista.Items.Count - 1;
+            _lista.TopIndex = Math.Max(0, _lista.Items.Count - 4);
+            _estado.ForeColor = _tablero.EstaResuelto ? Retro.Amarillo : Retro.Cian;
+            _estado.Text = _tablero.EstaResuelto
+                ? $"¡Resuelto manualmente en {_lista.Items.Count} movimientos!"
+                : $"{_lista.Items.Count} movimientos · Último: {movimiento}";
+        };
 
         discos.ValueChanged += (_, _) => PrepararJuego();
         reiniciar.Click += (_, _) => PrepararJuego();
@@ -335,7 +371,7 @@ public sealed class MainForm : Form
 
     private void SiguientePaso()
     {
-        if (_tablero is null || _lista is null || _estado is null || _iniciar is null)
+        if (_modoManual || _tablero is null || _lista is null || _estado is null || _iniciar is null)
             return;
 
         if (_siguiente == _movimientos.Count)

@@ -3,7 +3,9 @@
 Aplicación de escritorio en C# y Windows Forms con un único menú de estilo retro.
 
 - **Fibonacci:** calcula recursivamente la serie desde `F(0) = 0` hasta la cantidad de términos elegida (1 a 40). Usa memoria de resultados para evitar recalcular llamadas repetidas.
-- **Torres de Hanói:** genera recursivamente los movimientos mínimos para llevar de 1 a 10 discos de la torre A a la C, con la torre B como auxiliar. Muestra el tablero, la lista de movimientos, reproducción automática, pausa, paso a paso y reinicio.
+- **Torres de Hanói:** genera recursivamente los movimientos mínimos para llevar de 1 a 10 discos de la torre A a la C, con la torre B como auxiliar. Muestra el tablero, la lista de movimientos, reproducción automática, pausa, paso a paso y reinicio. También permite resolverlo manualmente.
+
+Para jugar manualmente, haz clic en el disco superior de cualquier torre: se vuelve gris. Pasa el cursor sobre otra torre donde pueda colocarse legalmente: aparecerá una copia gris con borde punteado. Haz clic en esa torre para mover el disco; la vista previa desaparecerá. Un movimiento inválido no se aplica. Al empezar a jugar manualmente se detiene la reproducción automática; pulsa **REINICIAR** para volver a ella.
 
 ## Descargar el ejecutable
 
