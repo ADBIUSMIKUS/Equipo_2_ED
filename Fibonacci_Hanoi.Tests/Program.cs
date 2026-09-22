@@ -1,7 +1,23 @@
+using System.Numerics;
 using FibonacciHanoi;
 
 var errores = new List<string>();
 var total = 0;
+
+Probar("Factorial: caso base 0! = 1", () => Algoritmos.Factorial(0) == 1);
+Probar("Factorial: caso base 1! = 1", () => Algoritmos.Factorial(1) == 1);
+Probar("Factorial: 5! = 120", () => Algoritmos.Factorial(5) == 120);
+Probar("Factorial: 10! = 3,628,800", () => Algoritmos.Factorial(10) == 3_628_800);
+Probar("Factorial: 20! sin desbordamiento", () => Algoritmos.Factorial(20) == BigInteger.Parse("2432902008176640000"));
+Probar("Factorial con pasos: genera traza correcta para 3!", () =>
+{
+    var (resultado, pasos) = Algoritmos.FactorialConPasos(3);
+    return resultado == 6 && pasos.Count >= 3;
+});
+Probar("Factorial: límite inferior negativo lanza excepción", () =>
+    Lanza<ArgumentOutOfRangeException>(() => Algoritmos.Factorial(-1)));
+Probar("Factorial: límite superior > 100 lanza excepción", () =>
+    Lanza<ArgumentOutOfRangeException>(() => Algoritmos.Factorial(101)));
 
 Probar("Fibonacci: 10 términos conocidos", () =>
     Algoritmos.Fibonacci(10).SequenceEqual(new long[] { 0, 1, 1, 2, 3, 5, 8, 13, 21, 34 }));

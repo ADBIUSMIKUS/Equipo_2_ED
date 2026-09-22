@@ -5,6 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fibonacci_Hanoi\Fibonacci_Hanoi.csproj" />

@@ -8,6 +8,8 @@ internal static class Retro
     public static readonly Color Cian = Color.FromArgb(44, 225, 248);
     public static readonly Color Rosa = Color.FromArgb(255, 79, 176);
     public static readonly Color Amarillo = Color.FromArgb(255, 221, 72);
+    public static readonly Color Verde = Color.FromArgb(0, 255, 163);
+    public static readonly Color Rojo = Color.FromArgb(255, 92, 119);
     public static readonly Color Texto = Color.FromArgb(243, 246, 255);
     public static readonly Color Secundario = Color.FromArgb(163, 175, 204);
 
@@ -29,7 +31,7 @@ public sealed class MainForm : Form
 
     public MainForm()
     {
-        Text = "Recursión Arcade | Fibonacci y Torres de Hanói";
+        Text = "Recursión Arcade | Factorial, Fibonacci y Torres de Hanói";
         Size = new Size(1220, 760);
         MinimumSize = new Size(1050, 680);
         StartPosition = FormStartPosition.CenterScreen;
@@ -50,14 +52,15 @@ public sealed class MainForm : Form
         var navegacion = new FlowLayoutPanel
         {
             Dock = DockStyle.Top,
-            Height = 220,
+            Height = 280,
             FlowDirection = FlowDirection.TopDown,
             WrapContents = false
         };
         navegacion.Controls.AddRange([
             BotonMenu("INICIO", Retro.Cian, MostrarInicio),
-            BotonMenu("FIBONACCI", Retro.Amarillo, MostrarFibonacci),
-            BotonMenu("TORRES DE HANÓI", Retro.Rosa, MostrarHanoi)
+            BotonMenu("01 · FACTORIAL", Retro.Verde, MostrarFactorial),
+            BotonMenu("02 · FIBONACCI", Retro.Amarillo, MostrarFibonacci),
+            BotonMenu("05 · HANÓI", Retro.Rosa, MostrarHanoi)
         ]);
         var pie = new Label
         {
@@ -157,13 +160,15 @@ public sealed class MainForm : Form
 
     private void MostrarInicio()
     {
-        var pagina = Preparar("SELECCIONA UNA MISIÓN", "Dos problemas clásicos resueltos mediante recursividad.");
-        var opciones = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1, Padding = new Padding(0, 8, 0, 16) };
-        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
-        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        var pagina = Preparar("SELECCIONA UNA MISIÓN", "Problemas clásicos resueltos mediante algoritmos recursivos.");
+        var opciones = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 3, RowCount = 1, Padding = new Padding(0, 8, 0, 16) };
+        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
+        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34f));
         opciones.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        opciones.Controls.Add(TarjetaInicio("01", "FIBONACCI", "Genera los términos de la sucesión con una función recursiva.", Retro.Amarillo, MostrarFibonacci), 0, 0);
-        opciones.Controls.Add(TarjetaInicio("02", "TORRES DE HANÓI", "Descubre cada movimiento y observa cómo cambia el tablero.", Retro.Rosa, MostrarHanoi), 1, 0);
+        opciones.Controls.Add(TarjetaInicio("01", "FACTORIAL", "Calcula n! recursivamente con validaciones y traza de llamadas.", Retro.Verde, MostrarFactorial), 0, 0);
+        opciones.Controls.Add(TarjetaInicio("02", "FIBONACCI", "Genera los términos de la sucesión con una función recursiva.", Retro.Amarillo, MostrarFibonacci), 1, 0);
+        opciones.Controls.Add(TarjetaInicio("05", "TORRES DE HANÓI", "Descubre cada movimiento y observa cómo cambia el tablero.", Retro.Rosa, MostrarHanoi), 2, 0);
         pagina.Controls.Add(opciones);
         opciones.BringToFront();
     }
@@ -182,9 +187,186 @@ public sealed class MainForm : Form
         return panel;
     }
 
+    private void MostrarFactorial()
+    {
+        var pagina = Preparar("01 · FACTORIAL", "n! = n × (n - 1)!, con 0! = 1. Función recursiva con trazabilidad de llamadas.");
+        var columnas = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
+        columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 36));
+        columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 64));
+        columnas.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+
+        var pnlEntrada = Tarjeta();
+        pnlEntrada.Margin = new Padding(0, 0, 10, 0);
+
+        var lblInstruccion = Etiqueta("INGRESA UN NÚMERO (n ≥ 0)", Retro.Verde, 11, 40);
+
+        var txtNumero = new TextBox
+        {
+            BackColor = Retro.FondoMenu,
+            ForeColor = Retro.Texto,
+            BorderStyle = BorderStyle.FixedSingle,
+            Font = Retro.Titulo(15),
+            TextAlign = HorizontalAlignment.Center,
+            Dock = DockStyle.Top,
+            Height = 38
+        };
+
+        var pnlBotones = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            Height = 58,
+            WrapContents = false,
+            Padding = new Padding(0, 10, 0, 0)
+        };
+
+        var btnCalcular = Boton("CALCULAR FACTORIAL", Retro.Verde);
+        btnCalcular.Width = 180;
+
+        var btnLimpiar = Boton("LIMPIAR", Retro.Secundario);
+        btnLimpiar.Width = 90;
+        btnLimpiar.Margin = new Padding(10, 0, 0, 0);
+
+        pnlBotones.Controls.AddRange([btnCalcular, btnLimpiar]);
+
+        var lblEstado = new Label
+        {
+            Dock = DockStyle.Top,
+            Height = 65,
+            ForeColor = Retro.Secundario,
+            Font = Retro.Cuerpo(9.5f),
+            TextAlign = ContentAlignment.MiddleLeft,
+            Text = "Ingresa un número entero y pulsa CALCULAR."
+        };
+
+        var lblReglas = new Label
+        {
+            Dock = DockStyle.Bottom,
+            Height = 110,
+            ForeColor = Retro.Secundario,
+            Font = Retro.Cuerpo(9),
+            Text = "• Rango recomendado: 0 a 100.\n• Caso base: 0! = 1\n• Caso recursivo: n! = n × (n - 1)!\n• Soporta números grandes con BigInteger sin desbordamiento."
+        };
+
+        pnlEntrada.Controls.Add(lblReglas);
+        pnlEntrada.Controls.Add(lblEstado);
+        pnlEntrada.Controls.Add(pnlBotones);
+        pnlEntrada.Controls.Add(txtNumero);
+        pnlEntrada.Controls.Add(lblInstruccion);
+
+        var pnlSalida = Tarjeta();
+        pnlSalida.Margin = new Padding(10, 0, 0, 0);
+
+        var lblTituloResultado = Etiqueta("RESULTADO", Retro.Verde, 12, 35);
+        var lblResultado = new TextBox
+        {
+            Dock = DockStyle.Top,
+            Height = 48,
+            ReadOnly = true,
+            Multiline = true,
+            BorderStyle = BorderStyle.None,
+            BackColor = Retro.FondoMenu,
+            ForeColor = Retro.Verde,
+            Font = Retro.Titulo(12),
+            Text = "Esperando cálculo..."
+        };
+
+        var lblTituloTraza = Etiqueta("TRAZA Y LLAMADAS RECURSIVAS", Retro.Cian, 11, 35);
+        lblTituloTraza.Dock = DockStyle.Top;
+
+        var txtPasos = new TextBox
+        {
+            Multiline = true,
+            ReadOnly = true,
+            ScrollBars = ScrollBars.Both,
+            Dock = DockStyle.Fill,
+            BackColor = Retro.FondoMenu,
+            ForeColor = Retro.Texto,
+            BorderStyle = BorderStyle.None,
+            Font = Retro.Titulo(10.5f),
+            Text = "Aquí se mostrará el árbol y retorno de cada llamada recursiva."
+        };
+
+        pnlSalida.Controls.Add(txtPasos);
+        pnlSalida.Controls.Add(lblTituloTraza);
+        pnlSalida.Controls.Add(lblResultado);
+        pnlSalida.Controls.Add(lblTituloResultado);
+
+        btnCalcular.Click += (_, _) =>
+        {
+            var texto = txtNumero.Text?.Trim();
+
+            if (string.IsNullOrWhiteSpace(texto))
+            {
+                lblEstado.ForeColor = Retro.Rojo;
+                lblEstado.Text = "⚠ Hay datos faltantes. Por favor introduce un número.";
+                MessageBox.Show("Hay datos faltantes", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNumero.Focus();
+                return;
+            }
+
+            if (!int.TryParse(texto, out var n))
+            {
+                lblEstado.ForeColor = Retro.Rojo;
+                lblEstado.Text = "⚠ Introducir sólo números enteros válidos.";
+                MessageBox.Show("Introducir sólo números", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtNumero.SelectAll();
+                txtNumero.Focus();
+                return;
+            }
+
+            if (n < 0)
+            {
+                lblEstado.ForeColor = Retro.Rojo;
+                lblEstado.Text = "⚠ El número debe ser un entero mayor o igual a cero.";
+                MessageBox.Show("El número debe ser un entero mayor o igual a cero.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtNumero.SelectAll();
+                txtNumero.Focus();
+                return;
+            }
+
+            if (n > 100)
+            {
+                lblEstado.ForeColor = Retro.Rojo;
+                lblEstado.Text = "⚠ Por favor ingresa un número menor o igual a 100.";
+                MessageBox.Show("Para evitar saturación de llamadas recursivas, introduce un número entre 0 y 100.", "Límite sugerido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            try
+            {
+                var (resultado, pasos) = Algoritmos.FactorialConPasos(n);
+                lblResultado.Text = $"{n}! = {resultado:N0}";
+                txtPasos.Text = string.Join(Environment.NewLine, pasos);
+                lblEstado.ForeColor = Retro.Verde;
+                lblEstado.Text = $"✔ ¡Cálculo exitoso! Se ejecutaron {n + 1} llamadas recursivas.";
+            }
+            catch (Exception ex)
+            {
+                lblEstado.ForeColor = Retro.Rojo;
+                lblEstado.Text = $"Error: {ex.Message}";
+                MessageBox.Show($"Error durante el cálculo: {ex.Message}", "Excepción", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        };
+
+        btnLimpiar.Click += (_, _) =>
+        {
+            txtNumero.Clear();
+            lblResultado.Text = "Esperando cálculo...";
+            txtPasos.Text = "Aquí se mostrará el árbol y retorno de cada llamada recursiva.";
+            lblEstado.ForeColor = Retro.Secundario;
+            lblEstado.Text = "Ingresa un número entero y pulsa CALCULAR.";
+            txtNumero.Focus();
+        };
+
+        columnas.Controls.Add(pnlEntrada, 0, 0);
+        columnas.Controls.Add(pnlSalida, 1, 0);
+        pagina.Controls.Add(columnas);
+        columnas.BringToFront();
+    }
+
     private void MostrarFibonacci()
     {
-        var pagina = Preparar("01 · FIBONACCI", "F(n) = F(n - 1) + F(n - 2), con F(0) = 0 y F(1) = 1.");
+        var pagina = Preparar("02 · FIBONACCI", "F(n) = F(n - 1) + F(n - 2), con F(0) = 0 y F(1) = 1.");
         var columnas = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 34));
         columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 66));
