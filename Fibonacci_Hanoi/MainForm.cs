@@ -28,6 +28,18 @@ public sealed class MainForm : Form
     private ListBox? _lista;
     private Label? _estado;
     private Button? _iniciar;
+    private TextBox? _txtNumeroFactorial;
+    private Button? _btnCalcularFactorial;
+
+    public bool MostrarPopups { get; set; } = true;
+
+    public void SimularFactorial(string valor)
+    {
+        MostrarFactorial();
+        if (_txtNumeroFactorial is not null)
+            _txtNumeroFactorial.Text = valor;
+        _btnCalcularFactorial?.PerformClick();
+    }
 
     public MainForm()
     {
@@ -291,6 +303,9 @@ public sealed class MainForm : Form
         pnlSalida.Controls.Add(lblResultado);
         pnlSalida.Controls.Add(lblTituloResultado);
 
+        _txtNumeroFactorial = txtNumero;
+        _btnCalcularFactorial = btnCalcular;
+
         btnCalcular.Click += (_, _) =>
         {
             var texto = txtNumero.Text?.Trim();
@@ -299,7 +314,7 @@ public sealed class MainForm : Form
             {
                 lblEstado.ForeColor = Retro.Rojo;
                 lblEstado.Text = "⚠ Hay datos faltantes. Por favor introduce un número.";
-                MessageBox.Show("Hay datos faltantes", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (MostrarPopups) MessageBox.Show("Hay datos faltantes", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNumero.Focus();
                 return;
             }
@@ -308,7 +323,7 @@ public sealed class MainForm : Form
             {
                 lblEstado.ForeColor = Retro.Rojo;
                 lblEstado.Text = "⚠ Introducir sólo números enteros válidos.";
-                MessageBox.Show("Introducir sólo números", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (MostrarPopups) MessageBox.Show("Introducir sólo números", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 txtNumero.SelectAll();
                 txtNumero.Focus();
                 return;
@@ -318,7 +333,7 @@ public sealed class MainForm : Form
             {
                 lblEstado.ForeColor = Retro.Rojo;
                 lblEstado.Text = "⚠ El número debe ser un entero mayor o igual a cero.";
-                MessageBox.Show("El número debe ser un entero mayor o igual a cero.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (MostrarPopups) MessageBox.Show("El número debe ser un entero mayor o igual a cero.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNumero.SelectAll();
                 txtNumero.Focus();
                 return;
@@ -328,7 +343,7 @@ public sealed class MainForm : Form
             {
                 lblEstado.ForeColor = Retro.Rojo;
                 lblEstado.Text = "⚠ Por favor ingresa un número menor o igual a 100.";
-                MessageBox.Show("Para evitar saturación de llamadas recursivas, introduce un número entre 0 y 100.", "Límite sugerido", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (MostrarPopups) MessageBox.Show("Para evitar saturación de llamadas recursivas, introduce un número entre 0 y 100.", "Límite sugerido", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

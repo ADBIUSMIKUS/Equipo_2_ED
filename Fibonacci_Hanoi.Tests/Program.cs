@@ -99,6 +99,45 @@ Probar("Tablero manual: al completar y reiniciar se limpia la selección", () =>
 }));
 
 Console.WriteLine($"Resultado: {total - errores.Count}/{total} pruebas correctas.");
+
+EjecutarSTA(() =>
+{
+    try
+    {
+        var carpeta = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "Capturas_Entrega"));
+        Directory.CreateDirectory(carpeta);
+
+        var casos = new (string Archivo, string Valor)[]
+        {
+            ("01_Calculo_Factorial_5.png", "5"),
+            ("02_Calculo_Factorial_20_BigInteger.png", "20"),
+            ("03_Validacion_Datos_Faltantes.png", ""),
+            ("04_Validacion_Solo_Numeros.png", "abc"),
+            ("05_Validacion_Numero_Negativo.png", "-5")
+        };
+
+        foreach (var (archivo, valor) in casos)
+        {
+            using var form = new MainForm { Width = 1220, Height = 760, StartPosition = FormStartPosition.Manual, Location = new System.Drawing.Point(-3000, -3000) };
+            form.MostrarPopups = false;
+            form.Show();
+            form.SimularFactorial(valor);
+            Application.DoEvents();
+
+            using var bmp = new System.Drawing.Bitmap(form.Width, form.Height);
+            form.DrawToBitmap(bmp, new System.Drawing.Rectangle(0, 0, form.Width, form.Height));
+            bmp.Save(Path.Combine(carpeta, archivo), System.Drawing.Imaging.ImageFormat.Png);
+            form.Close();
+        }
+        Console.WriteLine($"Evidencias generadas exitosamente en: {carpeta}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Nota capturas: {ex.Message}");
+    }
+    return true;
+});
+
 return errores.Count == 0 ? 0 : 1;
 
 void Probar(string nombre, Func<bool> prueba)
