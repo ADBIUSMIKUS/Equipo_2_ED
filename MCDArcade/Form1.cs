@@ -70,6 +70,15 @@ namespace MCDArcade
             SeleccionarMetodo(MetodoMCD.Euclides);
         }
 
+        public void SimularCalculo(long numeroA, long numeroB)
+        {
+            txtNumA.Text = numeroA.ToString();
+            txtNumB.Text = numeroB.ToString();
+            btnCalcular.PerformClick();
+        }
+
+        public string ResultadoActual => lblResultadoValor.Text;
+
         // ── Configuración de ventana ───────────────────────────────────────────
         private void ConfigurarVentana()
         {

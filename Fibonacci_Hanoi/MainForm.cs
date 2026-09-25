@@ -43,7 +43,7 @@ public sealed class MainForm : Form
 
     public MainForm()
     {
-        Text = "Recursión Arcade | Factorial, Fibonacci y Torres de Hanói";
+        Text = "Recursión Arcade | Todos los ejercicios del Equipo 2";
         Size = new Size(1220, 760);
         MinimumSize = new Size(1050, 680);
         StartPosition = FormStartPosition.CenterScreen;
@@ -64,7 +64,7 @@ public sealed class MainForm : Form
         var navegacion = new FlowLayoutPanel
         {
             Dock = DockStyle.Top,
-            Height = 280,
+            Height = 340,
             FlowDirection = FlowDirection.TopDown,
             WrapContents = false
         };
@@ -72,6 +72,7 @@ public sealed class MainForm : Form
             BotonMenu("INICIO", Retro.Cian, MostrarInicio),
             BotonMenu("01 · FACTORIAL", Retro.Verde, MostrarFactorial),
             BotonMenu("02 · FIBONACCI", Retro.Amarillo, MostrarFibonacci),
+            BotonMenu("MCD", Retro.Cian, AbrirMcd),
             BotonMenu("05 · HANÓI", Retro.Rosa, MostrarHanoi)
         ]);
         var pie = new Label
@@ -172,15 +173,16 @@ public sealed class MainForm : Form
 
     private void MostrarInicio()
     {
-        var pagina = Preparar("SELECCIONA UNA MISIÓN", "Problemas clásicos resueltos mediante algoritmos recursivos.");
-        var opciones = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 3, RowCount = 1, Padding = new Padding(0, 8, 0, 16) };
-        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
-        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.33f));
-        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33.34f));
-        opciones.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        var pagina = Preparar("SELECCIONA UNA MISIÓN", "Todos los ejercicios del Equipo 2 reunidos en una sola aplicación.");
+        var opciones = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 2, Padding = new Padding(0, 8, 0, 16) };
+        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        opciones.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
+        opciones.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
+        opciones.RowStyles.Add(new RowStyle(SizeType.Percent, 50));
         opciones.Controls.Add(TarjetaInicio("01", "FACTORIAL", "Calcula n! recursivamente con validaciones y traza de llamadas.", Retro.Verde, MostrarFactorial), 0, 0);
         opciones.Controls.Add(TarjetaInicio("02", "FIBONACCI", "Genera los términos de la sucesión con una función recursiva.", Retro.Amarillo, MostrarFibonacci), 1, 0);
-        opciones.Controls.Add(TarjetaInicio("05", "TORRES DE HANÓI", "Descubre cada movimiento y observa cómo cambia el tablero.", Retro.Rosa, MostrarHanoi), 2, 0);
+        opciones.Controls.Add(TarjetaInicio("MCD", "MÁXIMO COMÚN DIVISOR", "Resuelve el MCD con Euclides, restas, divisores o factorización.", Retro.Cian, AbrirMcd), 0, 1);
+        opciones.Controls.Add(TarjetaInicio("05", "TORRES DE HANÓI", "Resuelve la torre automática o manualmente.", Retro.Rosa, MostrarHanoi), 1, 1);
         pagina.Controls.Add(opciones);
         opciones.BringToFront();
     }
@@ -189,14 +191,29 @@ public sealed class MainForm : Form
     {
         var panel = Tarjeta();
         panel.Margin = new Padding(8);
-        panel.Controls.Add(new Label { Text = descripcion, Dock = DockStyle.Top, Height = 100, ForeColor = Retro.Secundario, Font = Retro.Cuerpo(11) });
-        panel.Controls.Add(Etiqueta(nombre, Retro.Texto, 20, 52));
-        panel.Controls.Add(new Label { Text = numero, Dock = DockStyle.Top, Height = 90, ForeColor = acento, Font = Retro.Titulo(38) });
+        panel.Padding = new Padding(16);
+        panel.Controls.Add(new Label { Text = descripcion, Dock = DockStyle.Top, Height = 58, ForeColor = Retro.Secundario, Font = Retro.Cuerpo(9.5f) });
+        panel.Controls.Add(Etiqueta(nombre, Retro.Texto, 15, 38));
+        panel.Controls.Add(new Label { Text = numero, Dock = DockStyle.Top, Height = 52, ForeColor = acento, Font = Retro.Titulo(25) });
         var entrar = Boton("ABRIR EJERCICIO ▶", acento);
         entrar.Dock = DockStyle.Bottom;
         entrar.Click += (_, _) => accion();
         panel.Controls.Add(entrar);
         return panel;
+    }
+
+    public void AbrirMcd()
+    {
+        _reproductor.Stop();
+        var abierta = Application.OpenForms.OfType<MCDArcade.Form1>().FirstOrDefault();
+        if (abierta is not null)
+        {
+            abierta.Activate();
+            return;
+        }
+
+        var ventana = new MCDArcade.Form1();
+        ventana.Show(this);
     }
 
     private void MostrarFactorial()
@@ -432,7 +449,7 @@ public sealed class MainForm : Form
 
     private void MostrarHanoi()
     {
-        var pagina = Preparar("02 · TORRES DE HANÓI", "Traslada todos los discos de A a C usando B como auxiliar y respetando las tres reglas.");
+        var pagina = Preparar("05 · TORRES DE HANÓI", "Traslada todos los discos de A a C usando B como auxiliar y respetando las tres reglas.");
         var columnas = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, RowCount = 1 };
         columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 70));
         columnas.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 30));

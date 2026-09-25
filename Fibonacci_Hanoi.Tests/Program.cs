@@ -1,5 +1,6 @@
 using System.Numerics;
 using FibonacciHanoi;
+using MCDArcade;
 
 var errores = new List<string>();
 var total = 0;
@@ -38,6 +39,16 @@ Probar("Hanói: límite inferior", () =>
     Lanza<ArgumentOutOfRangeException>(() => Algoritmos.Hanoi(0)));
 Probar("Hanói: límite superior", () =>
     Lanza<ArgumentOutOfRangeException>(() => Algoritmos.Hanoi(11)));
+
+Probar("MCD: calcula 48 y 18 mediante Euclides", () => EjecutarSTA(() =>
+{
+    using var formulario = new Form1();
+    formulario.Show();
+    Application.DoEvents();
+    formulario.SimularCalculo(48, 18);
+    Application.DoEvents();
+    return formulario.ResultadoActual.Contains("= 6");
+}));
 
 Probar("Tablero manual: sólo se selecciona el disco superior", () => EjecutarSTA(() =>
 {

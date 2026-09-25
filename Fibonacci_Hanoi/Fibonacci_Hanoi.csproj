@@ -5,6 +5,10 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyName>Ejercicios_Equipo_2</AssemblyName>
     <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCDArcade\MCDArcade.csproj" />
+  </ItemGroup>
 </Project>
